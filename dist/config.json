@@ -1,0 +1,16 @@
+{
+    "pipeLine": [
+        {
+            "batch": "1",
+            "file": "1.json"
+        },
+        {
+            "batch": "2",
+            "file": "2.json"
+        },
+        {
+            "batch": "3",
+            "file": "3.json"
+        }
+    ]
+}
