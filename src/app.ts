@@ -26,13 +26,12 @@ app.all("*", function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-  if (req.method == 'OPTIONS') {
+  if (req.method == "OPTIONS") {
     res.send(200);
-  }
-  else {
+  } else {
     next();
   }
-//   next();
+  //   next();
 });
 const router = express.Router();
 // 配置服务器
@@ -83,7 +82,7 @@ app.use(passport.session());
 //   pipeLineAnalysisController.updateConfigFile
 // );
 
-//TODO:数据准备
+//TODO:启动服务
 app.get(
   "/pipeLineAnalysis/startServer",
   pipeLineAnalysisController.startServer

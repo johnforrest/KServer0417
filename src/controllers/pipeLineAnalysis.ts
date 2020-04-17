@@ -24,7 +24,12 @@ let pipeGraph = new Graph();
 // PLID==>edge
 let pipeLinesInfo: any = {};
 
-// 读取管线数据源
+/**
+ *读取管线数据源
+ *
+ * @param {string} configPath
+ * @returns {any[]}
+ */
 function openDataSources(configPath: string): any[] {
   let result: any[] = [];
   let fileList: any[] = [];
@@ -48,6 +53,7 @@ function openDataSources(configPath: string): any[] {
           dataSource.buildSpatialIndex();
           // 构建连通图
           dataSource.buildConnectGraph();
+
           pipeLine.addDataSource(dataSource);
 
           resolve(dataSource);
@@ -59,43 +65,6 @@ function openDataSources(configPath: string): any[] {
   });
 
   return result;
-
-  // let configStrJson = JSON.parse(configStr);
-  // let configPipeLine = configStrJson.pipeLine;
-  // let dataPath = `${__dirname}/../data/`;
-
-  // for (let i = 0; i < configPipeLine.length; ++i) {
-  //   let absPath = dataPath + configPipeLine[i].file;
-  //   fileList.push({
-  //     absPath,
-  //     batch: configPipeLine[i].batch
-  //   });
-  // }
-
-  // //最终只需要fileList这一个即可
-  // fileList.forEach(file => {
-  //   let absolutePath = file.absPath;
-  //   let info = fs.statSync(absolutePath);
-  //   let extension = path.parse(absolutePath).ext;
-  //   if (info.isFile() && ".json" === extension) {
-  //     let promise = new Promise((resolve, reject) => {
-  //       let dataSource = new DataSource();
-  //       dataSource.readData(absolutePath, file.batch, dataSource => {
-  //         // 构建空间索引
-  //         dataSource.buildSpatialIndex();
-  //         // 构建连通图
-  //         dataSource.buildConnectGraph();
-  //         pipeLine.addDataSource(dataSource);
-
-  //         resolve(dataSource);
-  //       });
-  //     });
-
-  //     result.push(promise);
-  //   }
-  // });
-
-  // return result;
 }
 
 /**
@@ -797,8 +766,8 @@ export /**
  * @returns
  */
 const searchNodesByPLPTPost = (req: Request, res: Response) => {
-   //判断是否是是数组
-   if (req.body.PIPENODE != null) {
+  //判断是否是是数组
+  if (req.body.PIPENODE != null) {
     let pipeNode = req.body.PIPENODE.toString();
     let array = pipeNode.split(",");
     let resultArr: Array<object> = new Array<object>();
@@ -813,7 +782,7 @@ const searchNodesByPLPTPost = (req: Request, res: Response) => {
       let upstream = pipeGraph.dfsInv(pipeLineNode);
       resultArr.push({
         upstream,
-        downstream
+        downstream,
       });
     }
     return res.json(resultArr);
@@ -842,7 +811,7 @@ const searchNodesByPLPTPostUp = (req: Request, res: Response) => {
       // 逆向查询获取上游信息
       let upstream = pipeGraph.dfsInv(pipeLineNode);
       resultArr.push({
-        upstream
+        upstream,
       });
     }
     return res.json(resultArr);
@@ -856,8 +825,8 @@ export /**
  * @returns
  */
 const searchNodesByPLPTPostDown = (req: Request, res: Response) => {
-   //判断是否是是数组
-   if (req.body.PIPENODE != null) {
+  //判断是否是是数组
+  if (req.body.PIPENODE != null) {
     let pipeNode = req.body.PIPENODE.toString();
     let array = pipeNode.split(",");
     let resultArr: Array<object> = new Array<object>();
@@ -869,9 +838,9 @@ const searchNodesByPLPTPostDown = (req: Request, res: Response) => {
       // 正向查询获取下游信息
       let downstream = pipeGraph.dfs(pipeLineNode);
       // 逆向查询获取上游信息
-    //   let upstream = pipeGraph.dfsInv(pipeLineNode);
+      //   let upstream = pipeGraph.dfsInv(pipeLineNode);
       resultArr.push({
-        downstream
+        downstream,
       });
     }
     return res.json(resultArr);

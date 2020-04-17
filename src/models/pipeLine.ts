@@ -3,7 +3,12 @@ import * as path from "path";
 import { Cartesian3 } from "../util/cartesian3";
 import { PointOctree } from "../util/pointOctree";
 import { Graph } from "../util/graph";
-
+//
+/**
+ *函数接口，函数名称为CallBack，函数参数为obj，类型为任意类型，函数返回值为void类型
+ *
+ * @interface Callback
+ */
 interface Callback {
   (obj: any): void;
 }
@@ -40,8 +45,9 @@ export class DataSource {
       this._name = url;
       this._piBatch = batchId;
 
-      console.log("read dataSource successfully from: " + url);
-
+      // console.log("read dataSource successfully from: " + url);
+      console.log(url + "读取数据成功");
+      //TODO:回调函数，this指代当前的DataSouce对象
       handler(this);
     });
   }
@@ -96,16 +102,16 @@ export class DataSource {
             {
               x: edge.Points[0].x,
               y: edge.Points[0].y,
-              z: edge.Points[0].z
+              z: edge.Points[0].z,
             },
             {
               x: edge.Points[1].x,
               y: edge.Points[1].y,
-              z: edge.Points[1].z
-            }
+              z: edge.Points[1].z,
+            },
           ],
           Center: mid,
-          Info: edge
+          Info: edge,
         };
         lines.push(line);
 
@@ -242,7 +248,7 @@ export class PipeLine {
               SMFNode: 1,
               SMTNode: 2,
               PLPT0: "PLPT_0",
-              PLPT1: "PLPT_1"
+              PLPT1: "PLPT_1",
             },
             {
               ID: 1,
@@ -251,7 +257,7 @@ export class PipeLine {
               SMFNode: 2,
               SMTNode: 3,
               PLPT0: "PLPT_1",
-              PLPT1: "PLPT_2"
+              PLPT1: "PLPT_2",
             },
             {
               ID: 2,
@@ -260,7 +266,7 @@ export class PipeLine {
               SMFNode: 4,
               SMTNode: 5,
               PLPT0: "PLPT_3",
-              PLPT1: "PLPT_4"
+              PLPT1: "PLPT_4",
             },
             {
               ID: 3,
@@ -269,7 +275,7 @@ export class PipeLine {
               SMFNode: 5,
               SMTNode: 3,
               PLPT0: "PLPT_4",
-              PLPT1: "PLPT_2"
+              PLPT1: "PLPT_2",
             },
             {
               ID: 4,
@@ -278,41 +284,41 @@ export class PipeLine {
               SMFNode: 3,
               SMTNode: 6,
               PLPT0: "PLPT_2",
-              PLPT1: "PLPT_5"
-            }
+              PLPT1: "PLPT_5",
+            },
           ],
           Nodes: [
             {
               ID: 0,
               Type: "WS_NETWORK",
-              SmID: 1
+              SmID: 1,
             },
             {
               ID: 1,
               Type: "WS_NETWORK",
-              SmID: 2
+              SmID: 2,
             },
             {
               ID: 2,
               Type: "WS_NETWORK",
-              SmID: 3
+              SmID: 3,
             },
             {
               ID: 3,
               Type: "WS_NETWORK",
-              SmID: 4
+              SmID: 4,
             },
             {
               ID: 4,
               Type: "WS_NETWORK",
-              SmID: 5
+              SmID: 5,
             },
             {
               ID: 5,
               Type: "WS_NETWORK",
-              SmID: 6
-            }
-          ]
+              SmID: 6,
+            },
+          ],
         },
         YS_NETWORK: {
           Edges: [
@@ -323,7 +329,7 @@ export class PipeLine {
               SMFNode: 1,
               SMTNode: 2,
               PLPT0: "PLPT_6",
-              PLPT1: "PLPT_7"
+              PLPT1: "PLPT_7",
             },
             {
               ID: 1,
@@ -332,7 +338,7 @@ export class PipeLine {
               SMFNode: 2,
               SMTNode: 7,
               PLPT0: "PLPT_7",
-              PLPT1: "PLPT_4"
+              PLPT1: "PLPT_4",
             },
             {
               ID: 2,
@@ -341,7 +347,7 @@ export class PipeLine {
               SMFNode: 2,
               SMTNode: 3,
               PLPT0: "PLPT_7",
-              PLPT1: "PLPT_8"
+              PLPT1: "PLPT_8",
             },
             {
               ID: 3,
@@ -350,7 +356,7 @@ export class PipeLine {
               SMFNode: 3,
               SMTNode: 4,
               PLPT0: "PLPT_8",
-              PLPT1: "PLPT_10"
+              PLPT1: "PLPT_10",
             },
             {
               ID: 4,
@@ -359,7 +365,7 @@ export class PipeLine {
               SMFNode: 5,
               SMTNode: 4,
               PLPT0: "PLPT_9",
-              PLPT1: "PLPT_10"
+              PLPT1: "PLPT_10",
             },
             {
               ID: 5,
@@ -368,46 +374,46 @@ export class PipeLine {
               SMFNode: 4,
               SMTNode: 6,
               PLPT0: "PLPT_10",
-              PLPT1: "PLPT_11"
-            }
+              PLPT1: "PLPT_11",
+            },
           ],
           Nodes: [
             {
               ID: 0,
               Type: "YS_NETWORK",
-              SmID: 1
+              SmID: 1,
             },
             {
               ID: 1,
               Type: "YS_NETWORK",
-              SmID: 2
+              SmID: 2,
             },
             {
               ID: 2,
               Type: "YS_NETWORK",
-              SmID: 3
+              SmID: 3,
             },
             {
               ID: 3,
               Type: "YS_NETWORK",
-              SmID: 4
+              SmID: 4,
             },
             {
               ID: 4,
               Type: "YS_NETWORK",
-              SmID: 5
+              SmID: 5,
             },
             {
               ID: 5,
               Type: "YS_NETWORK",
-              SmID: 6
+              SmID: 6,
             },
             {
               ID: 6,
               Type: "YS_NETWORK",
-              SmID: 7
-            }
-          ]
+              SmID: 7,
+            },
+          ],
         },
         SS_NETWORK: {
           Edges: [
@@ -418,7 +424,7 @@ export class PipeLine {
               SMFNode: 6,
               SMTNode: 1,
               PLPT0: "PLPT_11",
-              PLPT1: "PLPT_12"
+              PLPT1: "PLPT_12",
             },
             {
               ID: 1,
@@ -427,7 +433,7 @@ export class PipeLine {
               SMFNode: 1,
               SMTNode: 2,
               PLPT0: "PLPT_12",
-              PLPT1: "PLPT_13"
+              PLPT1: "PLPT_13",
             },
             {
               ID: 2,
@@ -436,7 +442,7 @@ export class PipeLine {
               SMFNode: 2,
               SMTNode: 3,
               PLPT0: "PLPT_13",
-              PLPT1: "PLPT_14"
+              PLPT1: "PLPT_14",
             },
             {
               ID: 3,
@@ -445,7 +451,7 @@ export class PipeLine {
               SMFNode: 3,
               SMTNode: 4,
               PLPT0: "PLPT_14",
-              PLPT1: "PLPT_15"
+              PLPT1: "PLPT_15",
             },
             {
               ID: 4,
@@ -454,43 +460,43 @@ export class PipeLine {
               SMFNode: 4,
               SMTNode: 5,
               PLPT0: "PLPT_15",
-              PLPT1: "PLPT_16"
-            }
+              PLPT1: "PLPT_16",
+            },
           ],
           Nodes: [
             {
               ID: 0,
               Type: "SS_NETWORK",
-              SmID: 1
+              SmID: 1,
             },
             {
               ID: 1,
               Type: "SS_NETWORK",
-              SmID: 2
+              SmID: 2,
             },
             {
               ID: 2,
               Type: "SS_NETWORK",
-              SmID: 3
+              SmID: 3,
             },
             {
               ID: 3,
               Type: "SS_NETWORK",
-              SmID: 4
+              SmID: 4,
             },
             {
               ID: 4,
               Type: "SS_NETWORK",
-              SmID: 5
+              SmID: 5,
             },
             {
               ID: 5,
               Type: "SS_NETWORK",
-              SmID: 6
-            }
-          ]
-        }
-      }
+              SmID: 6,
+            },
+          ],
+        },
+      },
     };
 
     let json1 = {
@@ -501,34 +507,34 @@ export class PipeLine {
             {
               ID: 0,
               Type: "WS_NETWORK",
-              SmID: 1
+              SmID: 1,
             },
             {
               ID: 1,
               Type: "WS_NETWORK",
-              SmID: 2
+              SmID: 2,
             },
             {
               ID: 2,
               Type: "WS_NETWORK",
-              SmID: 3
+              SmID: 3,
             },
             {
               ID: 3,
               Type: "WS_NETWORK",
-              SmID: 4
+              SmID: 4,
             },
             {
               ID: 4,
               Type: "WS_NETWORK",
-              SmID: 5
+              SmID: 5,
             },
             {
               ID: 5,
               Type: "WS_NETWORK",
-              SmID: 6
-            }
-          ]
+              SmID: 6,
+            },
+          ],
         },
         YS_NETWORK: {
           Edges: [{}],
@@ -536,34 +542,34 @@ export class PipeLine {
             {
               ID: 0,
               Type: "YS_NETWORK",
-              SmID: 1
+              SmID: 1,
             },
             {
               ID: 1,
               Type: "YS_NETWORK",
-              SmID: 2
+              SmID: 2,
             },
             {
               ID: 2,
               Type: "YS_NETWORK",
-              SmID: 3
+              SmID: 3,
             },
             {
               ID: 3,
               Type: "YS_NETWORK",
-              SmID: 4
+              SmID: 4,
             },
             {
               ID: 4,
               Type: "YS_NETWORK",
-              SmID: 5
+              SmID: 5,
             },
             {
               ID: 5,
               Type: "YS_NETWORK",
-              SmID: 6
-            }
-          ]
+              SmID: 6,
+            },
+          ],
         },
         SS_NETWORK: {
           Edges: [{}],
@@ -571,36 +577,36 @@ export class PipeLine {
             {
               ID: 0,
               Type: "SS_NETWORK",
-              SmID: 1
+              SmID: 1,
             },
             {
               ID: 1,
               Type: "SS_NETWORK",
-              SmID: 2
+              SmID: 2,
             },
             {
               ID: 2,
               Type: "SS_NETWORK",
-              SmID: 3
+              SmID: 3,
             },
             {
               ID: 3,
               Type: "SS_NETWORK",
-              SmID: 4
+              SmID: 4,
             },
             {
               ID: 4,
               Type: "SS_NETWORK",
-              SmID: 5
+              SmID: 5,
             },
             {
               ID: 5,
               Type: "SS_NETWORK",
-              SmID: 6
-            }
-          ]
-        }
-      }
+              SmID: 6,
+            },
+          ],
+        },
+      },
     };
 
     let json2 = {
@@ -611,34 +617,34 @@ export class PipeLine {
             {
               ID: 0,
               Type: "WS_NETWORK",
-              SmID: 1
+              SmID: 1,
             },
             {
               ID: 1,
               Type: "WS_NETWORK",
-              SmID: 2
+              SmID: 2,
             },
             {
               ID: 2,
               Type: "WS_NETWORK",
-              SmID: 3
+              SmID: 3,
             },
             {
               ID: 3,
               Type: "WS_NETWORK",
-              SmID: 4
+              SmID: 4,
             },
             {
               ID: 4,
               Type: "WS_NETWORK",
-              SmID: 5
+              SmID: 5,
             },
             {
               ID: 5,
               Type: "WS_NETWORK",
-              SmID: 6
-            }
-          ]
+              SmID: 6,
+            },
+          ],
         },
         YS_NETWORK: {
           Edges: [{}],
@@ -646,34 +652,34 @@ export class PipeLine {
             {
               ID: 0,
               Type: "YS_NETWORK",
-              SmID: 1
+              SmID: 1,
             },
             {
               ID: 1,
               Type: "YS_NETWORK",
-              SmID: 2
+              SmID: 2,
             },
             {
               ID: 2,
               Type: "YS_NETWORK",
-              SmID: 3
+              SmID: 3,
             },
             {
               ID: 3,
               Type: "YS_NETWORK",
-              SmID: 4
+              SmID: 4,
             },
             {
               ID: 4,
               Type: "YS_NETWORK",
-              SmID: 5
+              SmID: 5,
             },
             {
               ID: 5,
               Type: "YS_NETWORK",
-              SmID: 6
-            }
-          ]
+              SmID: 6,
+            },
+          ],
         },
         SS_NETWORK: {
           Edges: [{}],
@@ -681,36 +687,36 @@ export class PipeLine {
             {
               ID: 0,
               Type: "SS_NETWORK",
-              SmID: 1
+              SmID: 1,
             },
             {
               ID: 1,
               Type: "SS_NETWORK",
-              SmID: 2
+              SmID: 2,
             },
             {
               ID: 2,
               Type: "SS_NETWORK",
-              SmID: 3
+              SmID: 3,
             },
             {
               ID: 3,
               Type: "SS_NETWORK",
-              SmID: 4
+              SmID: 4,
             },
             {
               ID: 4,
               Type: "SS_NETWORK",
-              SmID: 5
+              SmID: 5,
             },
             {
               ID: 5,
               Type: "SS_NETWORK",
-              SmID: 6
-            }
-          ]
-        }
-      }
+              SmID: 6,
+            },
+          ],
+        },
+      },
     };
 
     return json0;
