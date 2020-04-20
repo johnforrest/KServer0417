@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import fs from "fs";
 import path from "path";
 // 管线数据对象
-import { DataSource, PipeLine } from "../models/pipeLine";
+import { PipeLine } from "../models/PipeLine";
+import { DataSource } from "../models/Datasource";
 // 包围求
 import { BoundingSphere } from "../util/boundingSphere";
 import { BoundingBox } from "../util/boundingBox";

@@ -9,7 +9,8 @@ import passport from "passport";
 import * as userController from "./controllers/user";
 import * as pipeLineAnalysisController from "./controllers/pipeLineAnalysis";
 // 管线数据
-import { PipeLine, DataSource } from "./models/pipeLine";
+import { PipeLine } from "./models/PipeLine";
+import { DataSource } from "./models/Datasource";
 
 // 引入passportConfig的配置信息
 import * as passportConfig from "./config/passport";
