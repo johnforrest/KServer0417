@@ -15,9 +15,7 @@ Get http://localhost:9081/pipeLineAnalysis/horizontalProfile
 &POINT1[0]=-2399958.2658195393&POINT1[1]=5367313.75563679&POINT1[2]=2472470.9196066963
 &POINT2[0]=0.0&POINT2[1]=0.0&POINT2[2]=0.0
 
-###测试连接管点信息,输入管点PLPT，爆管分析
-Get http://localhost:9081/pipeLineAnalysis/searchNodesByPLPT
-?PIPENODE=YS03320358_QXXZ1
+
 
 ###测试连通管线信息,输入管线PLID
 Get http://localhost:9081/pipeLineAnalysis/searchNodesByPLID
@@ -32,16 +30,28 @@ Get http://localhost:9081/pipeLineAnalysis/verticalProfile
 ?POINT0[0]=-2401100.218089661&POINT0[1]=5365982.181927463&POINT0[2]=2472421.564441106
 &POINT1[0]=-2401090.2325399467&POINT1[1]=5366010.970612872&POINT1[2]=2473584.7178883716
 
-###内部测试，爆管分析
-Get http://localhost:9081/pipeLineAnalysis/searchNodesByPLPT
-?PIPENODE=PLPT_5
+
+
 
 ###内部测试
 Get http://localhost:9081/pipeLineAnalysis/getConnectionGraph
 
-###
+### TODO:要去发送请求，构建统一的连通图
 GET http://localhost:9081/pipeLineAnalysis/startServer
 
+
+
+
+###测试连接管点信息,输入管点PLPT，爆管分析
+Get http://localhost:9081/pipeLineAnalysis/searchNodesByPLPT
+?PIPENODE=YS03320358_QXXZ1
+
+###内部测试，爆管分析
+Get http://localhost:9081/pipeLineAnalysis/searchNodesByPLPT
+?PIPENODE=PLPT_5
+
+###20200420测站区域分析测试
+http://localhost:9081/pipeLineAnalysis/searchNodesByPLPT?PIPENODE=40YS19789
 
 ###
 http://127.0.0.1:9081/pipeLineAnalysis/searchNodesByPLPT?PIPENODE=40YS10538

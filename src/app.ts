@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 
 import path from "path";
 import passport from "passport";
-const multer = require("multer");
+// const multer = require("multer");
 // 引入controller对象
 import * as userController from "./controllers/user";
 import * as pipeLineAnalysisController from "./controllers/pipeLineAnalysis";
