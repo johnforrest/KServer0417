@@ -9,10 +9,15 @@ const pattern = [
   new Uint8Array([1, 0, 0]),
   new Uint8Array([1, 0, 1]),
   new Uint8Array([1, 1, 0]),
-  new Uint8Array([1, 1, 1])
+  new Uint8Array([1, 1, 1]),
 ];
 
-// 空间八叉树节点
+/**
+ *空间八叉树节点
+ *
+ * @export
+ * @class PointOctant
+ */
 export class PointOctant {
   // 节点包围盒最小值坐标
   private _min: Cartesian3;

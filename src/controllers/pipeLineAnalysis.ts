@@ -18,7 +18,8 @@ import { Plane } from "../util/plane";
 // 连通图
 import { Graph } from "../util/graph";
 // 导入相机用于断面分析
-import { Camera, Frustum } from "../util/camera";
+import { Camera } from "../util/Camera";
+import { Frustum } from "../util/Frustum";
 
 let pipeLine = new PipeLine();
 let pipeGraph = new Graph();

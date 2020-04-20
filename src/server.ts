@@ -4,9 +4,9 @@ import app from "./app";
 const server = app.listen(app.get("port"), () => {
   console.log(
     "  App is running at http://localhost:%d in %s mode",
-      //查询端口号和名称
-      app.get("port"),
-      app.get("env")
+    //查询端口号和名称
+    app.get("port"),
+    app.get("env")
   );
   console.log("  Press CTRL-C to stop\n");
 });

@@ -75,7 +75,7 @@ export class Graph {
   }
 
   /**
-   *
+   *添加连通图的边
    * @param {string} v：起点编号
    * @param {string} w：终点编号
    * @param {*} info

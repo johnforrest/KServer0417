@@ -3,7 +3,12 @@ import { Cartesian3 } from "./cartesian3";
 import { BoundingSphere } from "./boundingSphere";
 import { BoundingBox } from "./boundingBox";
 
-// 递归获取八叉树深度
+/**
+ *
+ *递归获取八叉树深度
+ * @param {PointOctant} octant
+ * @returns {number}
+ */
 function getDepth(octant: PointOctant): number {
   const children = octant.children;
 
@@ -23,7 +28,12 @@ function getDepth(octant: PointOctant): number {
   return result;
 }
 
-// 递归获取八叉树中点数量
+/**
+ *递归获取八叉树中点数量
+ *
+ * @param {PointOctant} octant
+ * @returns {number}
+ */
 function countPoints(octant: PointOctant): number {
   const children = octant.children;
 
@@ -111,7 +121,13 @@ function put(
   return done;
 }
 
-// 球与盒子碰撞检测
+/**
+ *球与盒子碰撞检测
+ *
+ * @param {BoundingSphere} sphere
+ * @param {BoundingBox} box
+ * @returns {boolean}
+ */
 function checkCollision(sphere: BoundingSphere, box: BoundingBox): boolean {
   // get closest point
   var x = Math.max(box.min.x, Math.min(sphere.center.x, box.max.x));
@@ -128,7 +144,13 @@ function checkCollision(sphere: BoundingSphere, box: BoundingBox): boolean {
   return distance < sphere.radius;
 }
 
-// 八叉树碰撞检测，返回与sphere相交的所有节点
+/**
+ *八叉树碰撞检测，返回与sphere相交的所有节点
+ *
+ * @param {PointOctant} octant
+ * @param {BoundingSphere} sphere
+ * @param {PointOctant[]} result
+ */
 function cull(
   octant: PointOctant,
   sphere: BoundingSphere,

@@ -23,6 +23,21 @@ export class DataSource {
   // 解析后的管网
   private _pipeNetWorks: { [key: string]: any } = {};
 
+  get piBatch(): string {
+    return this._piBatch;
+  }
+
+  get netWorks(): any {
+    return this._pipeNetWorks;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  get url(): string {
+    return this._url;
+  }
   constructor() {}
 
   //
@@ -195,21 +210,5 @@ export class DataSource {
       // 将连通图挂在对应的管网上
       pipeNetWork.Graph = netWorkGraph;
     }
-  }
-
-  get piBatch(): string {
-    return this._piBatch;
-  }
-
-  get netWorks(): any {
-    return this._pipeNetWorks;
-  }
-
-  get name(): string {
-    return this._name;
-  }
-
-  get url(): string {
-    return this._url;
   }
 }

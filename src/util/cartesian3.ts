@@ -16,7 +16,6 @@ export class Cartesian3 {
     this.z = z;
   }
 
-  // 向量加法
   /**
    *向量加法
    *
@@ -50,7 +49,6 @@ export class Cartesian3 {
     return result;
   }
 
-  // 向量点乘
   /**
    *向量点乘
    *
@@ -62,7 +60,6 @@ export class Cartesian3 {
     return this.x * other.x + this.y * other.y + this.z * other.z;
   }
 
-  // 向量叉乘
   /**
    *向量叉乘
    *
@@ -90,7 +87,6 @@ export class Cartesian3 {
     return result;
   }
 
-  // 向量乘标量
   /**
    *
    *向量乘标量
@@ -107,7 +103,6 @@ export class Cartesian3 {
     return result;
   }
 
-  // 向量除标量
   /**
    *
    *向量除标量
@@ -124,7 +119,6 @@ export class Cartesian3 {
     return result;
   }
 
-  // 向量对应元素相乘
   /**
    *向量对应元素相乘
    *
@@ -140,7 +134,6 @@ export class Cartesian3 {
     return result;
   }
 
-  // 向量归一化
   /**
    *向量归一化
    *
@@ -158,7 +151,6 @@ export class Cartesian3 {
     return result;
   }
 
-  // 向量模
   /**
    * 向量模
    *
@@ -169,19 +161,16 @@ export class Cartesian3 {
     return this.x * this.x + this.y * this.y + this.z * this.z;
   }
 
-  // 向量长度
   /**
-          *向量长度
-         /**
-          *
-          * @returns {number}
-          * @memberof Cartesian3
-          */
+   *向量长度
+   *
+   * @returns {number}
+   * @memberof Cartesian3
+   */
   magnitude(): number {
     return Math.sqrt(this.magnitudeSquared());
   }
 
-  // 由经纬度弧度值转笛卡尔
   /**
    *由经纬度弧度值转笛卡尔
    *
@@ -215,7 +204,6 @@ export class Cartesian3 {
     return result;
   }
 
-  // 由经纬度值转笛卡尔
   /**
    *由经纬度值转笛卡尔
    *
@@ -238,7 +226,6 @@ export class Cartesian3 {
     return result;
   }
 
-  // 拷贝向量内容
   /**
    *
    *拷贝向量内容
@@ -251,7 +238,6 @@ export class Cartesian3 {
     this.z = other.z;
   }
 
-  // 克隆出一个新对象
   /**
    *克隆出一个新对象
    *
@@ -262,7 +248,6 @@ export class Cartesian3 {
     return new Cartesian3(this.x, this.y, this.z);
   }
 
-  // 判断向量是否相等
   /**
    *判断向量是否相等
    *
@@ -274,7 +259,6 @@ export class Cartesian3 {
     return other.x === this.x && other.y === this.y && other.z === this.z;
   }
 
-  // 向量夹闭函数
   /**
    *向量夹闭函数
    *
