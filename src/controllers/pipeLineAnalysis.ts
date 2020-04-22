@@ -332,6 +332,8 @@ const startServer = (req: Request, res: Response) => {
   // let congfigFilePath = `${__dirname}/../config.json`;
   let congfigFilePath = `D:/config.json`;
   let promises = openDataSources(congfigFilePath);
+  //yjw：单个批次来更新
+  let promisesBatch = openDataSourcesBatch(congfigFilePath);
 
   Promise.all(promises).then(function (values) {
     // 构建连通图
