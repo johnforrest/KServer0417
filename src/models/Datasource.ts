@@ -23,6 +23,12 @@ export class DataSource {
   // 解析后的管网
   private _pipeNetWorks: { [key: string]: any } = {};
 
+  private pipeGraph: Graph = new Graph();
+
+  //TODO：声明 PLID==>edge
+  // private pipeLinesInfo: any = {};
+  private pipeLinesInfo: any = {};
+
   get piBatch(): string {
     return this._piBatch;
   }
@@ -38,6 +44,15 @@ export class DataSource {
   get url(): string {
     return this._url;
   }
+
+  get getPipeGraph(): Graph {
+    return this.pipeGraph;
+  }
+
+  get getPipeLinesInfo(): any {
+    return this.pipeLinesInfo;
+  }
+
   constructor() {}
 
   //
@@ -67,7 +82,6 @@ export class DataSource {
     });
   }
 
-  //
   /**
    *构建空间索引结构, 必须在readData后才能构建空间索引
    *
@@ -163,7 +177,7 @@ export class DataSource {
 
   /**
    *
-   *构建连通图
+   *根据不同的批次数据构建对应批次的连通图
    * @memberof DataSource
    */
   buildConnectGraph(): void {
@@ -171,6 +185,7 @@ export class DataSource {
     for (let key in pipeNetWorks) {
       // 每个数据集构造一个连通图
       let netWorkGraph = new Graph();
+
       //pipeNetWorks[key]为YS_NETWORK WS_NETWORK HS_NETWORK等
       let pipeNetWork = pipeNetWorks[key];
       let edges = pipeNetWork.Edges;
@@ -208,7 +223,91 @@ export class DataSource {
       }
 
       // 将连通图挂在对应的管网上
+      //TODO:pipeNetwork的结构变成了Edges，Nodes，Graph
       pipeNetWork.Graph = netWorkGraph;
     }
+  }
+
+  // buildDataSourceConnectGraphs(dataSources: DataSource[]) {
+  /**
+   *把当前批次的的DataSource构建成一整个连通图
+   *
+   * @memberof DataSource
+   */
+  buildDataSourceConnectGraphs(): void {
+    //TODO:置空对象
+    this.pipeGraph = new Graph();
+
+    //TODO：声明 PLID==>edge
+    // this.pipeLinesInfo:any = {};
+    this.pipeLinesInfo = {};
+
+    // 添加管点
+    // for (let dataSource of dataSources) {
+    //   let netWorks = dataSource.netWorks;
+
+    //   for (let netWorkName in netWorks) {
+    //     let netWork = netWorks[netWorkName];
+    let pipeNetWorks = this._pipeNetWorks;
+    for (let key in pipeNetWorks) {
+      // 每个数据集构造一个连通图
+      //   let netWork = new Graph();
+
+      //pipeNetWorks[key]为YS_NETWORK WS_NETWORK HS_NETWORK等
+      let netWork = pipeNetWorks[key];
+      let edges = netWork.Edges;
+      // smid-->nodeInfo, 存储管点信息到连通图
+      let nodes = netWork.Nodes;
+      let nodesMap: any = {};
+      for (let i = 0; i < nodes.length; i++) {
+        let SmID = nodes[i].SmID;
+        nodesMap[SmID] = nodes[i];
+      }
+
+      for (let edge of edges) {
+        let PLPT0 = edge.PLPT0;
+        let PLPT1 = edge.PLPT1;
+
+        let SmFid = edge.SMFNode;
+        let SmTid = edge.SMTNode;
+        // 获取起点与终点管点信息
+        let fNodeInfo = nodesMap[SmFid];
+        let tNodeInfo = nodesMap[SmTid];
+
+        if (fNodeInfo == null || tNodeInfo == null) {
+          console.log("stop");
+        }
+
+        this.pipeGraph.addVertex(PLPT0, fNodeInfo);
+        this.pipeGraph.addVertex(PLPT1, tNodeInfo);
+      }
+    }
+    // }
+
+    // 添加管线
+    // for (let dataSource of dataSources) {
+    //   let netWorks = dataSource.netWorks;
+    //   for (let netWorkName in netWorks) {
+    // let pipeNetWorks = this._pipeNetWorks;
+    for (let key in pipeNetWorks) {
+      // let netWork = netWorks[netWorkName];
+      let netWork = pipeNetWorks[key];
+      let edges = netWork.Edges;
+
+      for (let edge of edges) {
+        let PLPT0 = edge.PLPT0;
+        let PLPT1 = edge.PLPT1;
+
+        this.pipeGraph.addEdge(PLPT0, PLPT1, edge);
+
+        //TODO:存储信息 存储管线信息,用于连通查询根据管线ID查询
+        let PLID = edge.PLID;
+        this.pipeLinesInfo[PLID] = edge;
+      }
+    }
+    // }
+
+    console.log(this._piBatch + "的连通图构建完毕!");
+    // console.log("可以发送请求了!");
   }
 }

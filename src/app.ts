@@ -89,12 +89,18 @@ app.get(
   pipeLineAnalysisController.startServer
 );
 
+//TODO:启动服务
+app.get(
+  "/pipeLineAnalysis/startServerBatch",
+  pipeLineAnalysisController.startServerBatch
+);
+
 //TODO:express后台配置
 // 返回连通图，前端显示，用于测试调试
-app.get(
-  "/pipeLineAnalysis/getConnectionGraph",
-  pipeLineAnalysisController.getTestGraph
-);
+// app.get(
+//   "/pipeLineAnalysis/getConnectionGraph",
+//   pipeLineAnalysisController.getTestGraph
+// );
 
 // 管线分析模块路由
 // 净距分析接口
@@ -122,6 +128,15 @@ app.get(
   "/pipeLineAnalysis/searchNodesByPLPT",
   pipeLineAnalysisController.searchNodesByPLPT
 );
+
+// 输入PLID管线查询管线的上下游信息——爆管分析
+app.get(
+  "/pipeLineAnalysis/searchNodesByPLID",
+  pipeLineAnalysisController.searchNodesByPLID
+);
+// 输入两根管线的id值，返回最短路径——连通分析
+app.get("/pipeLineAnalysis/connected", pipeLineAnalysisController.connected);
+
 // 测站区域分析-输入PLPT管点查询管点的上下游信息
 app.post(
   "/pipeLineAnalysis/searchNodesByPLPTPost",
@@ -137,11 +152,15 @@ app.post(
   "/pipeLineAnalysis/searchNodesByPLPTPostDown",
   pipeLineAnalysisController.searchNodesByPLPTPostDown
 );
-// 输入PLID管线查询管线的上下游信息——爆管分析
+
+// 测站区域分析-输入PLPT管点查询管点的上下游信息
 app.get(
-  "/pipeLineAnalysis/searchNodesByPLID",
-  pipeLineAnalysisController.searchNodesByPLID
+  "/pipeLineAnalysis/searchNodesByPLPTBatch",
+  pipeLineAnalysisController.searchNodesByPLPTBatch
 );
 // 输入两根管线的id值，返回最短路径——连通分析
-app.get("/pipeLineAnalysis/connected", pipeLineAnalysisController.connected);
+app.get(
+  "/pipeLineAnalysis/connectedBatch",
+  pipeLineAnalysisController.connectedBatch
+);
 export default app;

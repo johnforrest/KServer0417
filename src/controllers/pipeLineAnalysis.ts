@@ -22,8 +22,10 @@ import { Camera } from "../util/Camera";
 import { Frustum } from "../util/Frustum";
 
 let pipeLine = new PipeLine();
+
 let pipeGraph = new Graph();
-// PLID==>edge
+
+//TODO：声明 PLID==>edge
 let pipeLinesInfo: any = {};
 
 /**
@@ -70,8 +72,53 @@ function openDataSources(configPath: string): any[] {
 }
 
 /**
+ *读取管线数据源
  *
- *配置混接管线（遍历数据源中的所有图，并将其合并）
+ * @param {string} configPath
+ * @returns {any[]}
+ */
+function openDataSourcesBatch(configPath: string): any[] {
+  let result: any[] = [];
+  let fileList: any[] = [];
+
+  //TODO:判断D:/config.json是否存在
+  fs.exists(configPath, function (exist) {
+    console.log(exist ? `${configPath}存在` : `${configPath}不存在`);
+  });
+  let configStr = fs.readFileSync(configPath).toString();
+  fileList = JSON.parse(configStr);
+
+  //最终只需要fileList这一个即可
+  fileList.forEach((file) => {
+    let absolutePath = file.jsonpath;
+    let info = fs.statSync(absolutePath);
+    let extension = path.parse(absolutePath).ext;
+    if (info.isFile() && ".json" === extension) {
+      let promise = new Promise((resolve, reject) => {
+        let dataSource = new DataSource();
+        dataSource.readData(absolutePath, file.piBatch, (dataSource) => {
+          // 构建空间索引
+          dataSource.buildSpatialIndex();
+          // 构建连通图
+          // dataSource.buildConnectGraph();
+          dataSource.buildDataSourceConnectGraphs();
+
+          pipeLine.addDataSource(dataSource);
+
+          resolve(dataSource);
+        });
+      });
+
+      result.push(promise);
+    }
+  });
+
+  return result;
+}
+
+/**
+ *
+ *遍历所有数据源中的所有数据集，构建成一个连通图（配置混接管线）
  * @param {DataSource[]} dataSources
  */
 function buildConnectGraphs(dataSources: DataSource[]) {
@@ -123,7 +170,7 @@ function buildConnectGraphs(dataSources: DataSource[]) {
 
         pipeGraph.addEdge(PLPT0, PLPT1, edge);
 
-        // 存储管线信息,用于连通查询根据管线ID查询
+        //TODO:存储信息 存储管线信息,用于连通查询根据管线ID查询
         let PLID = edge.PLID;
         pipeLinesInfo[PLID] = edge;
       }
@@ -134,7 +181,14 @@ function buildConnectGraphs(dataSources: DataSource[]) {
   console.log("可以发送请求了!");
 }
 
-// 根据PIBATCH、数据集名称、smid查找管线
+/**
+ *根据PIBATCH、数据集名称、smid查找管线
+ *
+ * @param {string} piBatch
+ * @param {string} type
+ * @param {string} smid
+ * @returns {*}
+ */
 function findPipeLine(piBatch: string, type: string, smid: string): any {
   let line;
   // 查找对应数据源
@@ -156,7 +210,13 @@ function findPipeLine(piBatch: string, type: string, smid: string): any {
   return line;
 }
 
-// 根据PIBATCH、type查找数据集
+/**
+ *根据PIBATCH、type查找数据集
+ *
+ * @param {string} piBatch
+ * @param {string} type
+ * @returns {*}
+ */
 function findPipeNetWork(piBatch: string, type: string): any {
   // 查找对应数据源
   let dataSource: DataSource = pipeLine.getDataSource(piBatch);
@@ -280,6 +340,36 @@ const startServer = (req: Request, res: Response) => {
       state: "OK",
     });
   });
+};
+
+export /**
+ *重新读取管线数据
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
+const startServerBatch = (req: Request, res: Response) => {
+  // 置空全局对象
+  pipeLine = new PipeLine();
+  // pipeGraph = new Graph();
+  // pipeLinesInfo = {};
+
+  // 重新读取json数据，构建管线数据结构
+  // let congfigFilePath = `${__dirname}/../config.json`;
+  let congfigFilePath = `D:/config.json`;
+  let promises = openDataSourcesBatch(congfigFilePath);
+
+  res.json({
+    state: "OK",
+  });
+
+  // Promise.all(promises).then(function (values) {
+  //   // 构建连通图
+  //   buildConnectGraphs(values);
+  //   res.json({
+  //     state: "OK",
+  //   });
+  // });
 };
 
 export /**
@@ -760,6 +850,37 @@ const searchNodesByPLPT = (req: Request, res: Response) => {
 
   return res.json({ upstream, downstream });
 };
+
+export /**
+ *根据批次号和输入PLPT管点查询管点的上下游信息
+ *测站区域分析
+ * @param {Request} req
+ * @param {Response} res
+ * @returns
+ */
+const searchNodesByPLPTBatch = (req: Request, res: Response) => {
+  const query = req.query;
+  // debugger;
+  // 输入管点的PLPT编号进行查询
+  const pipeLineNode = query.PIPENODE;
+  let piBatch = query.PIBATCH;
+
+  let targetDatasource: DataSource = pipeLine.getDataSource(piBatch);
+
+  let targetPipeGraph: Graph = targetDatasource.getPipeGraph;
+  // 正向查询获取下游信息
+  let downstream = targetPipeGraph.dfs(pipeLineNode);
+  // 逆向查询获取上游信息
+  let upstream = targetPipeGraph.dfsInv(pipeLineNode);
+
+  // 使用测试数据进行测试
+  // let testGraph = createTestGraph();
+  // let downstream = testGraph.dfs(pipeLineNode);
+  // let upstream = testGraph.dfsInv(pipeLineNode);
+
+  return res.json({ upstream, downstream });
+};
+
 export /**
  *输入PLPT管点查询管点的上下游信息
  *测站区域分析
@@ -859,7 +980,7 @@ const searchNodesByPLID = (req: Request, res: Response) => {
   const query = req.query;
   const PLID = query.PIPELINE;
 
-  // 获取管线信息
+  // TODO:3.应用-获取管线信息
   let edge = pipeLinesInfo[PLID];
   let PLPT0 = edge.PLPT0;
   let PLPT1 = edge.PLPT1;
@@ -869,7 +990,10 @@ const searchNodesByPLID = (req: Request, res: Response) => {
   // 查询终点的下游管线
   let downstream = pipeGraph.dfs(PLPT1);
 
-  return res.json({ upstream, downstream });
+  return res.json({
+    upstream,
+    downstream,
+  });
 };
 
 export /**
@@ -884,7 +1008,7 @@ const connected = (req: Request, res: Response) => {
   const PLID0 = query.PIPELINE0;
   const PLID1 = query.PIPELINE1;
 
-  // 获取管线信息
+  //TODO:-应用- 获取管线信息
   let edge0 = pipeLinesInfo[PLID0];
   let edge1 = pipeLinesInfo[PLID1];
   let edge0_PLPT0 = edge0.PLPT0;
@@ -903,7 +1027,10 @@ const connected = (req: Request, res: Response) => {
 
   if (start == end) {
     let path: any = [];
-    return res.json({ connected: true, path });
+    return res.json({
+      connected: true,
+      path,
+    });
   }
 
   // 重新调整返回值
@@ -936,41 +1063,146 @@ const connected = (req: Request, res: Response) => {
       edgesInfo.push(edgeInfo);
     }
 
-    result = { connected: true, path, nodesInfo, edgesInfo };
+    result = {
+      connected: true,
+      path,
+      nodesInfo,
+      edgesInfo,
+    };
   } else {
-    result = { connected: false, path: [] };
+    result = {
+      connected: false,
+      path: [],
+    };
   }
 
   return res.json(result);
 };
 
+// export /**
+//  *获取测试连通图
+//  *
+//  * @param {Request} req
+//  * @param {Response} res
+//  * @returns
+//  */
+// const getTestGraph = (req: Request, res: Response) => {
+//   let testGraph = new Graph();
+
+//   testGraph.addVertex("0", 0);
+//   testGraph.addVertex("1", 0);
+//   testGraph.addVertex("2", 0);
+//   testGraph.addVertex("3", 0);
+//   testGraph.addVertex("4", 0);
+//   testGraph.addVertex("5", 0);
+//   testGraph.addVertex("6", 0);
+
+//   testGraph.addEdge("0", "1", { SMLength: 1 });
+//   testGraph.addEdge("1", "3", { SMLength: 1 });
+//   testGraph.addEdge("3", "4", { SMLength: 2 });
+//   testGraph.addEdge("4", "5", { SMLength: 1 });
+//   testGraph.addEdge("1", "2", { SMLength: 2 });
+//   testGraph.addEdge("2", "5", { SMLength: 5 });
+//   testGraph.addEdge("2", "6", { SMLength: 1 });
+
+//   let result = testGraph.dikstra("0", "5");
+
+//   return res.json(result);
+// };
+
 export /**
- *获取测试连通图
  *
+ *连通性分析，输入两个管线，返回两根管线之间的最短路径
  * @param {Request} req
  * @param {Response} res
  * @returns
  */
-const getTestGraph = (req: Request, res: Response) => {
-  let testGraph = new Graph();
+const connectedBatch = (req: Request, res: Response) => {
+  const query = req.query;
 
-  testGraph.addVertex("0", 0);
-  testGraph.addVertex("1", 0);
-  testGraph.addVertex("2", 0);
-  testGraph.addVertex("3", 0);
-  testGraph.addVertex("4", 0);
-  testGraph.addVertex("5", 0);
-  testGraph.addVertex("6", 0);
+  const PLID0 = query.PIPELINE0;
+  const piBatch0 = query.PIBATCH0;
+  const PLID1 = query.PIPELINE1;
+  const piBatch1 = query.PIBATCH1;
 
-  testGraph.addEdge("0", "1", { SMLength: 1 });
-  testGraph.addEdge("1", "3", { SMLength: 1 });
-  testGraph.addEdge("3", "4", { SMLength: 2 });
-  testGraph.addEdge("4", "5", { SMLength: 1 });
-  testGraph.addEdge("1", "2", { SMLength: 2 });
-  testGraph.addEdge("2", "5", { SMLength: 5 });
-  testGraph.addEdge("2", "6", { SMLength: 1 });
+  if (piBatch0 != piBatch1) {
+    console.log("批次号不同，请选择批次号相同的两根管线！");
+    return res.json({});
+  }
 
-  let result = testGraph.dikstra("0", "5");
+  let targetDatasource: DataSource = pipeLine.getDataSource(piBatch0);
+
+  let targetPipeGraph: Graph = targetDatasource.getPipeGraph;
+
+  let targetPipeLinesInfo: any = targetDatasource.getPipeLinesInfo;
+
+  //TODO:-应用- 获取管线信息
+  let edge0 = targetPipeLinesInfo[PLID0];
+  let edge1 = targetPipeLinesInfo[PLID1];
+  let edge0_PLPT0 = edge0.PLPT0;
+  let edge0_PLPT1 = edge0.PLPT1;
+  let edge1_PLPT0 = edge1.PLPT0;
+  let edge1_PLPT1 = edge1.PLPT1;
+
+  // edge0在上游，edge1在下游
+  let start = edge0_PLPT1;
+  let end = edge1_PLPT0;
+  let result = targetPipeGraph.dikstra(edge0_PLPT1, edge1_PLPT0);
+  if (result.connected == false) {
+    (start = edge1_PLPT1), (end = edge0_PLPT0);
+    result = targetPipeGraph.dikstra(edge1_PLPT1, edge0_PLPT0);
+  }
+
+  if (start == end) {
+    let path: any = [];
+    return res.json({
+      connected: true,
+      path,
+    });
+  }
+
+  // 重新调整返回值
+  if (result.connected == true) {
+    let v = result.previousVertex[end];
+    let path: any = [];
+    while (v != "null") {
+      path.push(v);
+      v = result.previousVertex[v];
+    }
+    path.reverse();
+    path.push(end);
+
+    let nodesInfo: any = [];
+    let edgesInfo: any = [];
+    // 获取节点信息
+    for (let i = 0; i < path.length; i++) {
+      let info = targetPipeGraph.vertexInfo[path[i]];
+      let nodeInfo: any = {};
+      Object.assign(nodeInfo, info);
+      // 填充PLPTNO信息
+      nodeInfo.PLPTNO = path[i];
+      nodesInfo.push(nodeInfo);
+    }
+    // 获取边信息
+    for (let i = 0; i < path.length - 1; i++) {
+      let p0 = path[i];
+      let p1 = path[i + 1];
+      let edgeInfo = targetPipeGraph.adjacencyMapEdgeInfo[p0][p1];
+      edgesInfo.push(edgeInfo);
+    }
+
+    result = {
+      connected: true,
+      path,
+      nodesInfo,
+      edgesInfo,
+    };
+  } else {
+    result = {
+      connected: false,
+      path: [],
+    };
+  }
 
   return res.json(result);
 };
