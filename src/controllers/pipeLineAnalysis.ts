@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 // 管线数据对象
 import { PipeLine } from "../models/PipeLine";
+import { PipeLineBatch } from "../models/PipeLineBatch";
 import { DataSource } from "../models/Datasource";
 // 包围求
 import { BoundingSphere } from "../util/boundingSphere";
@@ -25,6 +26,7 @@ let pipeLine = new PipeLine();
 
 let pipeGraph = new Graph();
 
+let pipiLineBatch = new PipeLineBatch();
 //TODO：声明 PLID==>edge
 let pipeLinesInfo: any = {};
 
@@ -103,7 +105,7 @@ function openDataSourcesBatch(configPath: string): any[] {
           // dataSource.buildConnectGraph();
           dataSource.buildDataSourceConnectGraphs();
 
-          pipeLine.addDataSource(dataSource);
+          pipiLineBatch.addDataSource(dataSource);
 
           resolve(dataSource);
         });
@@ -352,7 +354,8 @@ export /**
  */
 const startServerBatch = (req: Request, res: Response) => {
   // 置空全局对象
-  pipeLine = new PipeLine();
+  // pipeLine = new PipeLine();
+  pipiLineBatch = new PipeLineBatch();
   // pipeGraph = new Graph();
   // pipeLinesInfo = {};
 
@@ -867,7 +870,7 @@ const searchNodesByPLPTBatch = (req: Request, res: Response) => {
   const pipeLineNode = query.PIPENODE;
   let piBatch = query.PIBATCH;
 
-  let targetDatasource: DataSource = pipeLine.getDataSource(piBatch);
+  let targetDatasource: DataSource = pipiLineBatch.getDataSource(piBatch);
 
   let targetPipeGraph: Graph = targetDatasource.getPipeGraph;
   // 正向查询获取下游信息
@@ -1132,7 +1135,10 @@ const connectedBatch = (req: Request, res: Response) => {
     return res.json({});
   }
 
-  let targetDatasource: DataSource = pipeLine.getDataSource(piBatch0);
+  let targetDatasource: DataSource = pipiLineBatch.getDataSource(piBatch0);
+  // let targetDatasource1: {
+  //   [key: string]: DataSource;
+  // } = pipiLineBatch.getAllDataSources();
 
   let targetPipeGraph: Graph = targetDatasource.getPipeGraph;
 
