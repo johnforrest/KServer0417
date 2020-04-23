@@ -6,9 +6,10 @@ export class Graph {
 
   // 存储连通图中节点信息
   private _vertexInfo: any = {};
-  // 正向连通图中终点编号=>管线信息
+
+  // 正向连通图中,终点编号=>管线信息
   private _adjacencyMapEdgeInfo: any = {};
-  // 逆向连通图中终点编号=>管线信息
+  // 逆向连通图中,终点编号=>管线信息
   private _adjacencyMapInvEdgeInfo: any = {};
 
   /**
@@ -23,27 +24,52 @@ export class Graph {
     this._adjacencyMapInvEdgeInfo = {};
   }
 
-  // 正向连通图
+  /**
+   *
+   *获取正向连通图
+   * @readonly
+   * @memberof Graph
+   */
   get adjacencyMap() {
     return this._adjacencyMap;
   }
 
-  // 逆向连通图
+  /**
+   *获取逆向连通图
+   *
+   * @readonly
+   * @memberof Graph
+   */
   get adjacencyMapInv() {
     return this._adjacencyMapInv;
   }
 
-  // 节点=>节点信息
+  /**
+   *
+   *获取节点=>节点信息
+   * @readonly
+   * @memberof Graph
+   */
   get vertexInfo() {
     return this._vertexInfo;
   }
 
-  // 正向连通图邻接表中终止点管线信息
+  /**
+   *
+   *获取正向连通图邻接表中终止点，管线信息
+   * @readonly
+   * @memberof Graph
+   */
   get adjacencyMapEdgeInfo() {
     return this._adjacencyMapEdgeInfo;
   }
 
-  // 逆向连通图邻接表终止点管线信息
+  /**
+   *
+   *获取逆向连通图邻接表终止点，管线信息
+   * @readonly
+   * @memberof Graph
+   */
   get adjacencyMapInvEdgeInfo() {
     return this._adjacencyMapInvEdgeInfo;
   }
@@ -58,6 +84,7 @@ export class Graph {
   addVertex(vertex: string, info: any): void {
     this._adjacencyMap[vertex] = [];
     this._adjacencyMapInv[vertex] = [];
+
     this._vertexInfo[vertex] = info;
     this._adjacencyMapEdgeInfo[vertex] = [];
     this._adjacencyMapInvEdgeInfo[vertex] = [];
@@ -78,7 +105,7 @@ export class Graph {
    *添加连通图的边
    * @param {string} v：起点编号
    * @param {string} w：终点编号
-   * @param {*} info
+   * @param {*} info：管线信息
    * @returns {boolean}
    * @memberof Graph
    */
@@ -90,10 +117,12 @@ export class Graph {
       this._adjacencyMap[v].push(w);
       // 逆向连通图
       this._adjacencyMapInv[w].push(v);
+
       // 存储正向图管线信息
       this._adjacencyMapEdgeInfo[v][w] = info;
       // 存储你逆向图管线信息
       this._adjacencyMapInvEdgeInfo[w][v] = info;
+
       result = true;
     }
 
@@ -120,7 +149,7 @@ export class Graph {
 
   /**
    *
-   *深度优先搜索-正向遍历
+   *深度优先搜索-正向遍历-获取下游管线
    * @param {string} start
    * @returns {*}
    * @memberof Graph
@@ -164,8 +193,9 @@ export class Graph {
         if (0 == this._adjacencyMap[v].length) {
           endNode.push(v);
           endNodeInfo.push(info);
-          console.log("进入尾结点了！", endNode.pop);
+          // console.log("下游尾结点了！", v);
         }
+
         //TODO:第二种情况，有孩子节点说明还没有到达一个分支的末尾
         for (let i = 0; i < this._adjacencyMap[v].length; i++) {
           let w = this._adjacencyMap[v][i];
@@ -179,11 +209,12 @@ export class Graph {
               exploredEdge.push(PLID);
               exploredEdgeInfo.push(edgeInfo);
             }
+            // console.log("PLID下游！", PLID);
           }
 
           if (exploredNode.indexOf(this._adjacencyMap[v][i]) == -1) {
             queue.push(this._adjacencyMap[v][i]);
-            console.log("进入队列了！", queue.pop());
+            // console.log("进入下游队列了！", this._adjacencyMap[v][i]);
           }
         }
       }
@@ -201,7 +232,7 @@ export class Graph {
 
   /**
    *
-   *逆向搜索
+   *逆向搜索-获取上游管线
    * @param {string} start
    * @returns {*}
    * @memberof Graph
@@ -213,6 +244,7 @@ export class Graph {
     let exploredNode: string[] = [];
     // 经过节点信息
     let exploredNodeInfo: any[] = [];
+
     // 经过的管线编号
     let exploredEdge: any[] = [];
     // 经过管线信息
@@ -230,20 +262,23 @@ export class Graph {
       exploredNode.push(v);
 
       let info: any = {};
+      //把连通图中此节点的信息拷贝出来
       Object.assign(info, this._vertexInfo[v]);
+      //给管点赋值完点号之后，然后把此信息加到点号的数组中
       info.PLPTNO = v;
       exploredNodeInfo.push(info);
 
       if (this._adjacencyMapInv[v] != undefined) {
-        // 没有孩子说明到达一个分支的末尾了
+        //TODO：没有孩子说明到达一个分支的末尾了
         if (0 == this._adjacencyMapInv[v].length) {
           endNode.push(v);
           endNodeInfo.push(info);
+          // console.log("进入上游尾结点了！", v);
         }
 
         for (let i = 0; i < this._adjacencyMapInv[v].length; i++) {
           let w = this._adjacencyMapInv[v][i];
-          // 逆向查找管綫
+          // 逆向查找管线
           let edgeInfo = this._adjacencyMapInvEdgeInfo[v][w];
           if (edgeInfo !== undefined) {
             let PLID = edgeInfo.PLID;
@@ -251,10 +286,12 @@ export class Graph {
               exploredEdge.push(PLID);
               exploredEdgeInfo.push(edgeInfo);
             }
+            // console.log("上游PLID！", PLID);
           }
 
           if (exploredNode.indexOf(w) == -1) {
             stack.push(w);
+            // console.log("进入上游队列了！", w);
           }
         }
       }

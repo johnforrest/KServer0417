@@ -214,45 +214,109 @@ export class PointOctree {
     this._pointCount = 0;
   }
 
+  /**
+   *获取八叉树根跟节点的最小坐标
+   *
+   * @readonly
+   * @type {Cartesian3}
+   * @memberof PointOctree
+   */
   get min(): Cartesian3 {
     return this._root.min;
   }
 
+  /**
+   *获取八叉树根跟节点的最大坐标
+   *
+   * @readonly
+   * @type {Cartesian3}
+   * @memberof PointOctree
+   */
   get max(): Cartesian3 {
     return this._root.max;
   }
 
-  // 返回八叉树根节点的孩子节点
+  /**
+   *
+   *返回八叉树根节点的孩子节点
+   * @readonly
+   * @type {PointOctant[]}
+   * @memberof PointOctree
+   */
   get children(): PointOctant[] {
     return this._root.children;
   }
 
-  // 返回八叉树中心点坐标
+  /**
+   *返回八叉树的中心点坐标
+   *
+   * @readonly
+   * @type {Cartesian3}
+   * @memberof PointOctree
+   */
   get center(): Cartesian3 {
     return this._root.center;
   }
 
-  // 返回空间维度
+  /**
+   *返回八叉树的空间维度
+   *
+   * @readonly
+   * @type {Cartesian3}
+   * @memberof PointOctree
+   */
   get dimensions(): Cartesian3 {
     return this._root.dimensions;
   }
 
+  /**
+   *返回八叉树容差
+   *
+   * @readonly
+   * @type {number}
+   * @memberof PointOctree
+   */
   get bias(): number {
     return this._bias;
   }
 
+  /**
+   *返回八叉树节点总数
+   *
+   * @type {number}
+   * @memberof PointOctree
+   */
   get pointCount(): number {
     return this._pointCount;
   }
 
+  /**
+   *设置八叉树节点总数
+   *
+   * @memberof PointOctree
+   */
   set pointCount(value: number) {
     this._pointCount = value;
   }
 
+  /**
+   *
+   *返回节点内最大点数量
+   * @readonly
+   * @type {number}
+   * @memberof PointOctree
+   */
   get maxPoints(): number {
     return this._maxPoints;
   }
 
+  /**
+   *返回八叉树的最大深度
+   *
+   * @readonly
+   * @type {number}
+   * @memberof PointOctree
+   */
   get maxDepth(): number {
     return this._maxDepth;
   }

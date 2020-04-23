@@ -93,7 +93,8 @@ export class DataSource {
     for (let key in pipeNetWorks) {
       let pipeNetWork = pipeNetWorks[key];
       let edges = pipeNetWork.Edges;
-      //初始化，给最小点的值赋值最大的坐标
+
+      //TODO:初始化，给最小点的值赋值最大的坐标
       let min = new Cartesian3(
         Number.MAX_VALUE,
         Number.MAX_VALUE,
@@ -105,7 +106,9 @@ export class DataSource {
         -Number.MAX_VALUE,
         -Number.MAX_VALUE
       );
-      //循环的作用：第一是遍历构建lines数组；第二是获取最小值点和最大值点。
+
+      //循环的作用：第一个作用是遍历构建lines数组；
+      //第二个作用是获取最小值点和最大值点。
       let lines = [];
       for (let i = 0; i < edges.length; i++) {
         let edge = edges[i];
@@ -122,7 +125,7 @@ export class DataSource {
         );
         let mid = p0.add(p1).divideByScalar(2);
 
-        // 拷贝一份管线数据存储到空间索引结构中
+        //TODO:拷贝一份管线数据存储到空间索引结构中
         let line = {
           Type: edge.Type,
           LineWidth: edge.LineWidth,
@@ -154,14 +157,14 @@ export class DataSource {
         min.z = Math.min(mid.z, min.z);
       }
 
-      // 构建空间索引结构
+      //TODO: 构建空间索引结构
       //TODO:容差0.0、节点最大点数100、最大深度8
       let octree = new PointOctree(min, max, 0.0, 100, 8);
       for (let i = 0; i < lines.length; i++) {
         octree.put(lines[i].Center, lines[i]);
       }
 
-      // 将空间索引结构挂在管网结构上
+      //TODO:将空间索引结构挂在管网结构上,YS_NETWORK,WS_NETWORK,HS_NETWORK
       pipeNetWork.Octree = octree;
 
       // 根据管线中SMNodeID查找管点对象

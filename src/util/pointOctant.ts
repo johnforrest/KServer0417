@@ -79,25 +79,53 @@ export class PointOctant {
     return this._min;
   }
 
+  /**
+   *节点包围盒最小值
+   *
+   * @readonly
+   * @type {Cartesian3}
+   * @memberof PointOctant
+   */
   get max(): Cartesian3 {
     return this._max;
   }
 
+  /**
+   *节点的所有孩子节点
+   *
+   * @readonly
+   * @type {PointOctant[]}
+   * @memberof PointOctant
+   */
   get children(): PointOctant[] {
     return this._children;
   }
 
+  /**
+   *节点中的三维点
+   *
+   * @readonly
+   * @type {Cartesian3[]}
+   * @memberof PointOctant
+   */
   get points(): Cartesian3[] {
     return this._points;
   }
 
+  /**
+   *节点中的数据
+   *
+   * @readonly
+   * @type {any[]}
+   * @memberof PointOctant
+   */
   get data(): any[] {
     return this._data;
   }
 
   /**
    *
-   *给定顶点到节点包围盒的空间距离平方
+   *给定顶点到节点包围盒表面的空间距离平方
    * @param {Cartesian3} point
    * @returns {number}
    * @memberof PointOctant

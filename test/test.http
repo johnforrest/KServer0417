@@ -22,8 +22,7 @@ Get http://localhost:9081/pipeLineAnalysis/searchNodesByPLID
 ?PIPELINE=YS02621647_TXXZ1YS02621989_TXXZ1
 
 ###连通分析，输入两根管线的id值，返回最短路径
-Get http://localhost:9081/pipeLineAnalysis/connected
-?PIPELINE0=YS02621647_TXXZ1YS02621989_TXXZ1&PIPELINE1=YS02621894_TXXZ1YS02621646_TXXZ1
+Get http://localhost:9081/pipeLineAnalysis/connected?PIPELINE0=40YS1979340YS19796&PIPELINE1=40YS1979440YS19795
 
 ###输入直线两个端点，将直线右侧管线投影到直线所在平面上，
 Get http://localhost:9081/pipeLineAnalysis/verticalProfile
@@ -52,7 +51,7 @@ Get http://localhost:9081/pipeLineAnalysis/searchNodesByPLPT?PIPENODE=PLPT_5
 ###20200420测站区域分析测试
 http://localhost:9081/pipeLineAnalysis/searchNodesByPLPT?PIPENODE=40YS19845
 
-###
+### 卡死，崩溃等原因
 http://127.0.0.1:9081/pipeLineAnalysis/searchNodesByPLPT?PIPENODE=40YS10538
 
 ###
@@ -68,7 +67,7 @@ content-type: application/json
 
 
 ###20200422测站区域分析测试
-http://localhost:9081/pipeLineAnalysis/searchNodesByPLPTBatch?PIPENODE=40YS19845&PIBATCH=1
+Get http://localhost:9081/pipeLineAnalysis/searchNodesByPLPTBatch?PIPENODE=40YS19845&PIBATCH=1
 
 
 ###连通分析，输入两根管线的id值，返回最短路径
