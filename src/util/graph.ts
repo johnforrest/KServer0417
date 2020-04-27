@@ -1,3 +1,4 @@
+const logger = require("../../log/logger.js");
 export class Graph {
   // 正向连通图
   private _adjacencyMap: any = {};
@@ -232,7 +233,7 @@ export class Graph {
 
   /**
    *
-   *逆向搜索-获取上游管线
+   *逆向搜索-获取上游管线，非递归循环方式，邻接数组方式实现
    * @param {string} start
    * @returns {*}
    * @memberof Graph
@@ -253,12 +254,22 @@ export class Graph {
     // 终点点号
     let endNode: any[] = [];
     let endNodeInfo: any[] = [];
-
+    var flag = 0;
     while (stack.length != 0) {
+      flag++;
+      logger.info(
+        "------------------------------------------------while循环----第" +
+          flag +
+          "次循环-------------"
+      );
+      //弹出并获取数组中最后一个元素，改变原始数组
       let v = stack.pop();
 
-      if (exploredNode.indexOf(v) !== -1) continue;
-
+      if (exploredNode.indexOf(v) !== -1) {
+        logger.info("while循环----最终的节点包含此节点，跳出循环");
+        continue;
+      }
+      //TODO:存入节点编号，把当前点的节点存入到最终的节点列表中
       exploredNode.push(v);
 
       let info: any = {};
@@ -266,33 +277,48 @@ export class Graph {
       Object.assign(info, this._vertexInfo[v]);
       //给管点赋值完点号之后，然后把此信息加到点号的数组中
       info.PLPTNO = v;
+      //TODO:存入节点信息
       exploredNodeInfo.push(info);
 
+      //连通图中包含此节点信息
       if (this._adjacencyMapInv[v] != undefined) {
-        //TODO：没有孩子说明到达一个分支的末尾了
         if (0 == this._adjacencyMapInv[v].length) {
+          //TODO：没有孩子说明到达一个分支的末尾了
           endNode.push(v);
           endNodeInfo.push(info);
-          // console.log("进入上游尾结点了！", v);
+          logger.info("while循环----到达一个分支的尾结点了！", v);
         }
-
+        //临接矩阵中此节点的长度不为零
         for (let i = 0; i < this._adjacencyMapInv[v].length; i++) {
+          logger.info(
+            "---------------for循环-------" +
+              this._adjacencyMapInv[v].length +
+              "长度开始------"
+          );
+          logger.info("-----------------" + i + "次开始----");
+          //获取下一个节点
           let w = this._adjacencyMapInv[v][i];
-          // 逆向查找管线
+          // 获取节点v和节点w的管线信息
           let edgeInfo = this._adjacencyMapInvEdgeInfo[v][w];
           if (edgeInfo !== undefined) {
             let PLID = edgeInfo.PLID;
+            //TODO:如果边的集合中不包含此管线，则添加此管线信息
             if (exploredEdge.indexOf(PLID) == -1) {
               exploredEdge.push(PLID);
               exploredEdgeInfo.push(edgeInfo);
+              logger.info("把经过管线压入管线队列", PLID);
             }
-            // console.log("上游PLID！", PLID);
+          }
+          //如果此节点的没有再存储的经过节点数组中，则进行下一次的循环
+          if (exploredNode.indexOf(w) == -1) {
+            //TODO:优化，这样就不需要重复往stack中存入了
+            if (stack.indexOf(w) == -1) {
+              stack.push(w);
+              logger.info("把下一个节点压入队列，进行下一次循环", w);
+            }
           }
 
-          if (exploredNode.indexOf(w) == -1) {
-            stack.push(w);
-            // console.log("进入上游队列了！", w);
-          }
+          logger.info("--------------" + i + "次结束----");
         }
       }
     }
