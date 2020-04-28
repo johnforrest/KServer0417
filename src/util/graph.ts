@@ -311,7 +311,7 @@ export class Graph {
           }
           //如果此节点的没有再存储的经过节点数组中，则进行下一次的循环
           if (exploredNode.indexOf(w) == -1) {
-            //TODO:优化，这样就不需要重复往stack中存入了
+            //TODO:yjw优化，这样就不需要重复往stack中存入了
             if (stack.indexOf(w) == -1) {
               stack.push(w);
               logger.info("把下一个节点压入队列，进行下一次循环", w);
