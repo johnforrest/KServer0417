@@ -2,14 +2,14 @@ const logger = require("../../log/logger.js");
 export class Graph {
   // 正向连通图
   private _adjacencyMap: any = {};
-  // 逆向连通图
-  private _adjacencyMapInv: any = {};
+  // 正向连通图中,终点编号=>管线信息
+  private _adjacencyMapEdgeInfo: any = {};
 
   // 存储连通图中节点信息
   private _vertexInfo: any = {};
 
-  // 正向连通图中,终点编号=>管线信息
-  private _adjacencyMapEdgeInfo: any = {};
+  // 逆向连通图
+  private _adjacencyMapInv: any = {};
   // 逆向连通图中,终点编号=>管线信息
   private _adjacencyMapInvEdgeInfo: any = {};
 
@@ -84,10 +84,11 @@ export class Graph {
    */
   addVertex(vertex: string, info: any): void {
     this._adjacencyMap[vertex] = [];
-    this._adjacencyMapInv[vertex] = [];
+    this._adjacencyMapEdgeInfo[vertex] = [];
 
     this._vertexInfo[vertex] = info;
-    this._adjacencyMapEdgeInfo[vertex] = [];
+
+    this._adjacencyMapInv[vertex] = [];
     this._adjacencyMapInvEdgeInfo[vertex] = [];
   }
 

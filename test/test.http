@@ -39,6 +39,14 @@ Get http://localhost:9081/pipeLineAnalysis/getConnectionGraph
 GET http://localhost:9081/pipeLineAnalysis/startServer
 
 ### TODO:要去发送请求，构建统一的连通图
+GET http://10.219.242.128:9081/pipeLineAnalysis/startServer
+
+
+### TODO:要去发送请求，构建统一的连通图
+GET http://172.16.110.198:9081/pipeLineAnalysis/startServer
+
+
+### TODO:要去发送请求，构建统一的连通图
 GET http://localhost:9081/pipeLineAnalysis/startServerBatch
 
 
