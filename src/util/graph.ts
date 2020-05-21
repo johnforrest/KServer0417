@@ -473,4 +473,57 @@ export class Graph {
 
     return { connected: true, distanceFromStart, previousVertex };
   }
+
+
+
+/**
+ *查找start和end之间的所有路径
+ *
+ * @param {string} start
+ * @param {string} end
+ * @returns {*}
+ * @memberof Graph
+ */
+findAllPath(start: string, end: string): any {
+
+  let visited: any = {};
+  for (const key in this._vertexInfo) {
+    visited[key] = false;
+  }
+
+  let result: string[] = [];
+  this.traverse(start, end, "", visited, result);
+
+  return result;
+}
+
+/**
+ *
+ *
+ * @param {string} start
+ * @param {string} end
+ * @param {string} path
+ * @param {*} visited
+ * @param {string[]} result
+ * @memberof Graph
+ */
+traverse(start: string, end: string, path: string, visited: any, result: string[]) {
+  let newPath = path + "," + start;
+  visited[start] = true;
+
+  for (let i = 0; i < this._adjacencyMap[start].length; i++) {
+    let w = this._adjacencyMap[start][i];
+    if (w !== end && visited[w] === false) {
+      this.traverse(w, end, newPath, visited, result);
+    } else {
+      if(result.indexOf(newPath + "," + w)==-1){
+        result.push(newPath + "," + w);
+      }
+    }
+  }
+
+  visited[start] = false;
+}
+
+
 }
