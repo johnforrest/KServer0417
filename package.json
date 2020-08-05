@@ -14,7 +14,7 @@
     "@types/fs-extra": "^8.1.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "express-fileupload": "^1.1.6-alpha.6",
+    "express-fileupload": "^1.1.9",
     "log4js": "^6.2.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0"
